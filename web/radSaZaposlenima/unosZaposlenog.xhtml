@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>RTS | Unos zaposlenog</title>
+        <link rel="icon" type="image/gif" href="resources/img/favicon.gif" />
+        <style>
+            .ui-panelgrid tr,
+            .ui-panelgrid td{
+                border: none;
+                background: none;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <ui:composition template="./../WEB-INF/osnovniTemplate.xhtml" >
+            <ui:define name="content">
+                <p:panel header="Unos zaposlenog" style="background: #f4f9fd;">
+                    <ezcomp:unosZaposlenog formaId="formaUnosZap" izmena="false"/>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

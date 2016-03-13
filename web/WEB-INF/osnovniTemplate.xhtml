@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>RTS</title>
+        <link rel="icon" type="image/gif" href="resources/img/favicon.gif" />
+    </h:head>
+
+    <h:body>
+        <c:if test="#{mBLogovanje.daLiJePlanerUlogovan()}">
+            <div id="top">
+                <h:form>
+                    <p:panel id="toppanel" style="background-image: url('../resources/img/top.jpg'); height: 115px; background-repeat: repeat-x;" >
+                        <p:graphicImage value="../resources/img/logo.png" alt="RTS" style="float: left;" />
+                    </p:panel>
+                    <p:menubar style="background: #f4f9fd;">
+                        <p:submenu label="Rad sa zaposlenima" style="background: #b0dcf7;" >
+                            <p:menuitem value="Unos zaposlenog" action="/radSaZaposlenima/unosZaposlenog.xhtml" actionListener="#{mBPrikazZaposlenih.ukloniIzabranogZaposlenog()}" ajax="false" style="background: #b0dcf7" />
+                            <p:menuitem value="Prikaz zaposlenih" action="/radSaZaposlenima/prikazZaposlenih.xhtml" actionListener="#{mBPrikazZaposlenih.ukloniIzabranogZaposlenog()}" ajax="false" style="background: #b0dcf7" />
+                        </p:submenu>
+                        <p:submenu label="Rad sa emisijama" style="background: #b0dcf7;" >
+                            <p:menuitem value="Unos emisije" action="/radSaEmisijama/unosEmisije.xhtml" ajax="false" style="background: #b0dcf7" />
+                            <p:menuitem value="Prikaz emisija" action="/radSaEmisijama/prikazEmisija.xhtml" ajax="false" style="background: #b0dcf7" />
+                        </p:submenu>
+                        <f:facet name="options">
+                            <h:outputText value="#{mBSesija.ulogovaniPlaner.ime} #{mBSesija.ulogovaniPlaner.prezime}" />
+                            <p:commandButton value="Izloguj se" action="#{mBLogovanje.odjaviPlanera()}" ajax="false" />
+                        </f:facet>
+                    </p:menubar>
+                </h:form>
+            </div>
+            
+            <div id="content" class="center_content" style="background: #f4f9fd; min-height: 350px;">
+                <ui:insert name="content"></ui:insert>
+            </div>
+        </c:if>
+        
+        <c:if test="#{!mBLogovanje.daLiJePlanerUlogovan()}">
+            <div id="top">
+                <h:form>
+                    <p:panel id="toppanel" style="background-image: url('../resources/img/top.jpg'); height: 115px; background-repeat: repeat-x;" >
+                        <p:graphicImage value="../resources/img/logo.png" alt="RTS" style="float: left;" />
+                    </p:panel>
+                </h:form>
+            </div>
+
+            <div id="content" class="center_content" style="background: #f4f9fd; min-height: 385px;">
+                <p:outputPanel>
+                    <h:outputText value="Niste ulogovani! Da bi ste se ulogovali, kliknite na "></h:outputText>
+                    <a href="http://localhost:8080/SnimanjeEmisijaWEB">link</a>
+                </p:outputPanel>
+            </div>
+        </c:if>
+
+        <div id="bottom" style="background-image: url('../resources/img/bottom.jpg'); height: 50px; background-repeat: repeat-x;" >
+            <p:outputPanel style="text-align: center; margin-top: 20px;">
+                Copyright &copy; 2014 Vukić
+            </p:outputPanel>
+        </div>
+
+    </h:body>
+
+</html>

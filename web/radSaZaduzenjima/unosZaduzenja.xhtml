@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>RTS | Unos zaduženja</title>
+        <link rel="icon" type="image/gif" href="resources/img/favicon.gif" />
+        <style>
+            .ui-panelgrid tr,
+            .ui-panelgrid td{
+                border: none;
+                background: none;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <ui:composition template="./../WEB-INF/osnovniTemplate.xhtml" >
+            <ui:define name="content">
+                <p:panel header="Unos zaduženja" style="background: #f4f9fd;">
+                    <h:form id="frmUnosStavkiZad">
+                        <p:growl id="msgs" />
+                        <p:panelGrid columns="2">
+                            <h:outputLabel value="Zaposlen:" />
+                            <h:outputText value="#{mBUnosZaduzenja.zad.zaposlenID.ime} #{mBUnosZaduzenja.zad.zaposlenID.prezime}" />
+                            
+                            <h:outputLabel value="Datum zaduženja:" />
+                            <h:outputText value="#{mBUnosZaduzenja.zad.datumZaduzenja}" >
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
+                            </h:outputText>
+
+                            <p:outputLabel value="Emisija: " />
+                            <p:selectOneMenu id="izborEmisija" value="#{mBUnosZaduzenja.zad.emisijaID}" required="false" converter="konverterEmisija">
+                                <f:selectItems value="#{mBUnosZaduzenja.vratiEmisije()}" var="emisija" itemLabel="#{emisija.nazivEmisije}" itemValue="#{emisija}" />
+                            </p:selectOneMenu>
+
+                            <h:outputLabel value="Zadužio:" />
+                            <h:outputText value="#{mBUnosZaduzenja.zad.zaduzio.ime} #{mBUnosZaduzenja.zad.zaduzio.prezime}" />
+                        </p:panelGrid>
+
+                        <p:dataTable id="stavkeTabela" value="#{mBUnosZaduzenja.zad.stavkazaduzenjaList}" var="stavke" selectionMode="single" selection="#{mBUnosZaduzenja.izabranaStavka}" rowKey="#{stavke.stavkazaduzenjaPK.rb}" widgetVar="stavkeTbl" emptyMessage="Sistem ne može da nađe stavke po zadatim vrednostima" >
+                            <p:column headerText="RB" >
+                                <h:outputText value="#{stavke.stavkazaduzenjaPK.rb}" />
+                            </p:column>
+                            
+                            <p:column headerText="Oprema" >
+                                <h:outputText value="#{stavke.opermaID.nazivOpreme}" />
+                            </p:column>
+
+                            <f:facet name="footer" >
+                                <p:commandButton value="Dodaj stavku" action="#{mBUnosZaduzenja.pokreniDodavanjeStavke()}" oncomplete="dlgUnosStavke.show()"/>
+                                <p:commandButton value="Obriši stavku" action="#{mBUnosZaduzenja.obrisiStavku()}" update="@form"/>
+                                <p:commandButton value="Saćuvaj zaduženje" action="#{mBUnosZaduzenja.sacuvajZaduzenje()}" />
+                            </f:facet>
+                        </p:dataTable>
+                    </h:form>
+                    
+                    <p:dialog id="dialogUnosStavke" widgetVar="dlgUnosStavke" header="Unos stavki zaduženja" showEffect="fade" hideEffect="fade" resizable="false" modal="true" >
+                        <h:form id="frmUnosStavke">
+                            <p:messages id="msgPoruke" />
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Oprema:" />
+                                <p:selectOneMenu id="izborOpreme" value="#{mBUnosZaduzenja.izabranaStavka.opermaID}" required="false" converter="konverterOpreme">
+                                    <f:selectItems value="#{mBUnosZaduzenja.vratiOpremu()}" var="oprema" itemLabel="#{oprema.nazivOpreme}" itemValue="#{oprema}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            
+                            <p:commandButton value="Dodaj stavku" update=":frmUnosStavkiZad:stavkeTabela" action="#{mBUnosZaduzenja.dodajStavku()}" />
+                        </h:form>
+                    </p:dialog>
+                    
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>RTS | Unos emisije</title>
+        <link rel="icon" type="image/gif" href="resources/img/favicon.gif" />
+        <style>
+            .ui-panelgrid tr,
+            .ui-panelgrid td{
+                border: none;
+                background: none;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <ui:composition template="./../WEB-INF/osnovniTemplate.xhtml" >
+            <ui:define name="content">
+                <p:panel id="panel" header="Unos emisije" style="background: #f4f9fd;">
+                    <h:form id="unosEmisije">
+                        <p:growl id="msgs" />
+                        <p:panelGrid columns="2">
+                            <h:outputLabel for="id" value="Emisija ID:" />
+                            <p:inputText id="id" value="#{mBEmisija.vratiEmisijaID()}" required="true" requiredMessage="Unesite ID" disabled="true" />
+
+                            <h:outputLabel for="naziv" value="Naziv emisije" />
+                            <p:inputText id="naziv" value="#{mBEmisija.e.nazivEmisije}" required="true" requiredMessage="Unesite naziv emisije" />
+
+                            <h:outputLabel for="tip" value="Tip emisije" />
+                            <p:inputText id="tip" value="#{mBEmisija.e.tipEmisije}" required="true" requiredMessage="Unesite tip emisije" />
+                        </p:panelGrid>
+                    <p:commandButton id="unos" update="msgs" value="Sačuvaj" action="#{mBEmisija.sacuvajEmisiju()}" ajax="false" />
+                    <p:button value="Otkaži" />
+                    </h:form>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

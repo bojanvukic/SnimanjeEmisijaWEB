@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
+    <h:head>
+        <title>RTS | Prikaz zaduženja</title>
+        <link rel="icon" type="image/gif" href="resources/img/favicon.gif" />
+        <style>
+            #formaPrikazZad .ui-column-filter {
+                display: none;
+            }
+            .ui-panelgrid td{
+                border: none;
+                background: none;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <ui:composition template="./../WEB-INF/osnovniTemplate.xhtml" >
+            <ui:define name="content">
+                <p:panel header="Prikaz zaduženja" style="background: #f4f9fd;">
+                    <h:form id="formaPrikazZad">
+                        <p:dataTable id="zadTabela" value="#{mBPrikazZaduzenja.listaZaduzenja}" var="zaduzenje" selectionMode="single" selection="#{mBPrikazZaduzenja.izabranoZaduzenje}" rowKey="#{zaduzenje.zaduzenjeID}" widgetVar="zadTbl" emptyMessage="Sistem ne može da nađe zaduženja po zadatim vrednostima" scrollable="true" scrollHeight="150" >
+                            <f:facet name="header">
+                                <h:outputText value="Prikaz zaduženja za zaposlenog: #{mBPrikazZaduzenja.izabraniZaposlen.ime} #{mBPrikazZaduzenja.izabraniZaposlen.prezime}" />
+                                <br />
+                                <br />
+                                <h:outputText value="Pretraga zaduženja po kriterijumu: " />
+                                <p:commandButton value="Vraćeno" update="@form" action="#{mBPrikazZaduzenja.listaVracenihZaduzenja()}" oncomplete="zadTbl.filter()" />
+                                <p:commandButton value="Nije vraćeno" update="@form" action="#{mBPrikazZaduzenja.listaNevracenihZaduzenja()}" oncomplete="zadTbl.filter()" />
+                            </f:facet>
+                            
+                            <p:column headerText="Zaduženje ID" >
+                                <h:outputText value="#{zaduzenje.zaduzenjeID}" />
+                            </p:column>
+                            
+                            <p:column headerText="Datum zaduženja" sortBy="#{zaduzenje.datumZaduzenja}" >
+                                <h:outputText value="#{zaduzenje.datumZaduzenja}" >
+                                    <f:convertDateTime pattern="dd.MM.yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            
+                            <p:column headerText="Datum razduženja" sortBy="#{zaduzenje.datumRazduzenja}" >
+                                <h:outputText value="#{zaduzenje.datumRazduzenja}" >
+                                    <f:convertDateTime pattern="dd.MM.yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            
+                            <p:column headerText="Status" filterBy="#{zaduzenje.vraceno}" filterMatchMode="equals">
+                                <p:selectBooleanCheckbox value="#{zaduzenje.vraceno}" disabled="true" />
+                            </p:column>
+                            
+                            <p:column headerText="Emisija" >
+                                <h:outputText value="#{zaduzenje.emisijaID.nazivEmisije}" />
+                            </p:column>
+                            
+                            <p:column headerText="Zadužio" >
+                                <h:outputText value="#{zaduzenje.zaduzio.ime} #{zaduzenje.zaduzio.prezime}" />
+                            </p:column>
+                            
+                            <p:column headerText="Razdužio" >
+                                <h:outputText value="#{zaduzenje.razduzio.ime} #{zaduzenje.razduzio.prezime}" />
+                            </p:column>
+                            
+                            <f:facet name="footer" >
+                                <p:commandButton value="Kreiraj novo zaduženje" action="#{mBPrikazZaduzenja.prikaziUnosZaduzenja()}" />
+                                <p:commandButton value="Detalji" update=":frmIzmenaZad" oncomplete="dlgIzmena.show()" action="#{mBPrikazZaduzenja.postaviIzabranoZaduzenje()}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </h:form>
+                                        
+                    <p:dialog id="dialogIzmena" widgetVar="dlgIzmena" header="Izmena zaduženja" showEffect="fade" hideEffect="fade" resizable="false" modal="true" >
+                        <h:form id="frmIzmenaZad">
+                            <p:growl id="msg" />
+                            <p:panelGrid columns="4">
+                                <h:outputLabel value="Emisija:" />
+                                <h:outputText value="#{mBPrikazZaduzenja.izabranoZaduzenje.emisijaID.nazivEmisije}" />
+                                <h:outputText value="" />
+                                <h:outputText value="" />
+
+                                <h:outputLabel value="Datum zaduženja:" />
+                                <h:outputText value="#{mBPrikazZaduzenja.izabranoZaduzenje.datumZaduzenja}" >
+                                    <f:convertDateTime pattern="dd.MM.yyyy" />
+                                </h:outputText>
+                                
+                                <h:outputLabel value="Zadužio:" />
+                                <h:outputText value="#{mBPrikazZaduzenja.izabranoZaduzenje.zaduzio.ime} #{mBPrikazZaduzenja.izabranoZaduzenje.zaduzio.prezime}" />
+                                
+                                <h:outputLabel value="Datum razduženja:" />
+                                <h:outputText value="#{mBPrikazZaduzenja.izabranoZaduzenje.datumRazduzenja}" >
+                                    <f:convertDateTime pattern="dd.MM.yyyy" />
+                                </h:outputText>
+                                
+                                <h:outputLabel value="Razdužio:" />
+                                <h:outputText value="#{mBPrikazZaduzenja.izabranoZaduzenje.razduzio.ime} #{mBPrikazZaduzenja.izabranoZaduzenje.razduzio.prezime}" />
+                            </p:panelGrid>
+                            
+                            <p:dataTable id="stavkeTabelaZ" value="#{mBPrikazZaduzenja.izabranoZaduzenje.stavkazaduzenjaList}" var="stavke" rowKey="#{stavke.stavkazaduzenjaPK.rb}" widgetVar="stavkeTblZ" emptyMessage="Sistem ne može da nađe stavke po zadatim vrednostima">
+                                <p:column headerText="RB">
+                                    <h:outputText value="#{stavke.stavkazaduzenjaPK.rb}" />
+                                </p:column>
+
+                                <p:column headerText="Oprema" >
+                                    <h:outputText value="#{stavke.opermaID.nazivOpreme}" />
+                                </p:column>
+                            </p:dataTable>
+                            
+                            <p:commandButton value="Razduži" update=":formaPrikazZad:zadTabela"  action="#{mBPrikazZaduzenja.razduziZaduzenje()}" ajax="false" />
+                        </h:form>
+                    </p:dialog>
+                    
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

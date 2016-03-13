@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
+    <h:head>
+        <title>RTS | Prikaz zaposlenih</title>
+        <link rel="icon" type="image/gif" href="resources/img/favicon.gif" />
+        <style>
+            #formaPrikazZap .ui-column-filter {
+                display: none;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <ui:composition template="./../WEB-INF/osnovniTemplate.xhtml" >
+            <ui:define name="content">
+                <p:panel header="Prikaz zaposlenih" style="background: #f4f9fd;">
+                    <h:form id="formaPrikazZap">
+                        <p:dataTable id="zapTabela" value="#{mBPrikazZaposlenih.listaZaposlenih}" var="zaposlen" selectionMode="single" selection="#{mBPrikazZaposlenih.izabraniZaposlen}" rowKey="#{zaposlen.zaposlenID}" widgetVar="zapTbl" emptyMessage="Sistem ne može da nađe zaposlene po zadatim vrednostima" scrollable="true" scrollHeight="210" >
+                            <f:facet name="header" >
+                                <p:outputPanel>
+                                    <h:outputText value="Unesite kriterijum pretrage: " />
+                                    <p:inputText id="globalFilter" />
+                                    <p:commandButton value="Pronađi" oncomplete="zapTbl.filter()"/>
+                                </p:outputPanel>
+                            </f:facet>
+                            
+                            <p:column headerText="ZaposlenID" sortBy="#{zaposlen.zaposlenID}" >
+                                <h:outputText value="#{zaposlen.zaposlenID}" />
+                            </p:column>
+                            
+                            <p:column headerText="Ime" sortBy="#{zaposlen.ime}" filterBy="#{zaposlen.ime}" >
+                                <h:outputText value="#{zaposlen.ime}" />
+                            </p:column>
+                            
+                            <p:column headerText="Prezime" sortBy="#{zaposlen.prezime}" filterBy="#{zaposlen.prezime}" >
+                                <h:outputText value="#{zaposlen.prezime}" />
+                            </p:column>
+                            
+                            <p:column headerText="JMBG" >
+                                <h:outputText value="#{zaposlen.jmbg}" />
+                            </p:column>
+                            
+                            <p:column headerText="Datum zaposlenja" sortBy="#{zaposlen.datumZaposlenja}" >
+                                <h:outputText value="#{zaposlen.datumZaposlenja}" >
+                                    <f:convertDateTime pattern="dd.MM.yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            
+                            <p:column headerText="Telefon" >
+                                <h:outputText value="#{zaposlen.telefon}" />
+                            </p:column>
+                            
+                            <p:column headerText="Adresa" >
+                                <h:outputText value="#{zaposlen.adresa}" />
+                            </p:column>
+                            
+                            <p:column headerText="Mesto" sortBy="#{zaposlen.ptt.naziv}" >
+                                <h:outputText value="#{zaposlen.ptt.naziv}" />
+                            </p:column>
+                            
+                            <f:facet name="footer" >
+                                <p:commandButton value="Detalji" action="#{mBPrikazZaposlenih.postaviIzabranogZaposlenog()}" update=":komponenta:formaIzmenaZap" oncomplete="dlgIzmena.show()" />
+                                <p:commandButton value="Obriši" action="#{mBPrikazZaposlenih.obrisiZaposlenog()}" oncomplete="zapTbl.filter()" />
+                                <p:commandButton value="Pregled zaduženja" action="#{mBPrikazZaposlenih.prikaziZaduzenja()}" />
+                            </f:facet>
+                        </p:dataTable>
+                    </h:form>
+                    
+                    <p:dialog id="dialogIzmena" widgetVar="dlgIzmena" header="Izmena zaposlenog" showEffect="fade" hideEffect="fade" resizable="false" modal="true" >
+                        <ezcomp:unosZaposlenog id="komponenta" formaId="formaIzmenaZap" izmena="true" />
+                    </p:dialog>
+                    
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

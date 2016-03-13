@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="formaId" required="false" type="java.lang.String" />
+        <cc:attribute name="izmena" required="false" type="java.lang.Boolean" />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form id="#{cc.attrs.formaId}">
+            <p:growl id="msgs" />
+            <p:panelGrid columns="2">
+                <h:outputLabel for="id" value="Zaposlen ID:" />
+                
+                <c:if test="#{!cc.attrs.izmena}">
+                    <p:inputText id="id" value="#{mBUnosZaposlenog.vratiZaposlenID()}" required="true" requiredMessage="Unesite ID" disabled="true" />
+                </c:if>
+                <c:if test="#{cc.attrs.izmena}">
+                    <p:inputText id="id" value="#{mBUnosZaposlenog.zap.zaposlenID}" required="true" requiredMessage="Unesite ID" disabled="true" />
+                </c:if>
+                
+                <h:outputLabel for="ime" value="Ime:" />
+                <p:inputText id="ime" value="#{mBUnosZaposlenog.zap.ime}" required="true" requiredMessage="Unesite ime" />
+                
+                <h:outputLabel for="prezime" value="Prezime:" />
+                <p:inputText id="prezime" value="#{mBUnosZaposlenog.zap.prezime}" required="true" requiredMessage="Unesite prezime" />
+                
+                <h:outputLabel for="jmbg" value="JMBG:" />
+                <p:inputText id="jmbg" value="#{mBUnosZaposlenog.zap.jmbg}" required="true" requiredMessage="Unesite JMBG" validatorMessage="Niste uneli JMBG u odgovarajućem formatu" >
+                    <f:validateRegex pattern="[0-9]{13}" />
+                </p:inputText>
+                
+                <p:outputLabel value="Datum zaposlenja:" />
+                <p:calendar id="datum" value="#{mBUnosZaposlenog.zap.datumZaposlenja}" required="true" pattern="dd.MM.yyyy" showOn="button" requiredMessage="Unesite datum" />
+                
+                <h:outputLabel for="telefon" value="Telefon:" />
+                <p:inputMask mask="999/999-999?9" id="telefon" value="#{mBUnosZaposlenog.zap.telefon}" required="true" requiredMessage="Unesite telefon" />
+                
+                <h:outputLabel for="adresa" value="Adresa:" />
+                <p:inputText id="adresa" value="#{mBUnosZaposlenog.zap.adresa}" required="true" requiredMessage="Unesite adresu i broj" />
+                
+                <p:outputLabel value="Mesto:" />
+                <p:selectOneMenu id="izborMesta" value="#{mBUnosZaposlenog.zap.ptt}" required="false" converter="konverterMesta">
+                    <f:selectItems value="#{mBUnosZaposlenog.vratiMesta()}" var="mesto" itemLabel="#{mesto.naziv}" itemValue="#{mesto}" />
+                </p:selectOneMenu>
+            </p:panelGrid>
+            <p:commandButton id="unos" update="msgs" value="Sačuvaj" action="#{mBUnosZaposlenog.sacuvajZaposlenog()}" ajax="false" />
+            <p:button value="Otkaži" />
+        </h:form>
+    </cc:implementation>
+</html>
